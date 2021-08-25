@@ -7,6 +7,7 @@ namespace Vergleich_Prozedural_vs._Objektorientierung
 
         static void Main(string[] args)
         {
+            // Prozedurale Personen anlegen
             string PP1_Name = "Müller";
             string PP1_Vorname = "Meyer";
             int PP1_Alter = 1;
@@ -28,10 +29,12 @@ namespace Vergleich_Prozedural_vs._Objektorientierung
             string PP3_Beruf = "Beruf";
             bool PP3_changed = false;
 
+            // Objektorientierte Personen Anlegen
             Person OP1 = new Person("Müller", "Meyer", 1, "Beruf", "Hobby");
             Person OP2 = new Person("Mustermann", "Max", 2, "Beruf", "Hobby");
             Person OP3 = new Person("Beispiel", "OhneZahl", 3, "Beruf", "Hobby");
 
+            // Alle Personen Ausgeben
             Console.WriteLine("[Prozedural Ausgabe]");
             Console.WriteLine("Name : " + PP1_Name + "\nVorname: " + PP1_Vorname + "\nAlter: " + PP1_Alter + "\nBeruf: " + PP1_Beruf + "\nHobby: " + PP1_Hobby + "\n");
             Console.WriteLine("Name : " + PP2_Name + "\nVorname: " + PP2_Vorname + "\nAlter: " + PP2_Alter + "\nBeruf: " + PP2_Beruf + "\nHobby: " + PP2_Hobby + "\n");
