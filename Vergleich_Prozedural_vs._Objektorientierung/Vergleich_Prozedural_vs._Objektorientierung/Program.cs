@@ -116,16 +116,28 @@ namespace Vergleich_Prozedural_vs._Objektorientierung
             // Konstruktor
             public Person(string name, string vorname, int alter)
             {
-                this.name = name;
-                this.vorname = vorname;
+                if (StringHasNumber(name) == false)
+                {
+                    this.name = name;
+                }
+                if (StringHasNumber(vorname) == false)
+                {
+                    this.vorname = vorname;
+                }
                 this.alter = alter;
                 changed = false;
             }
 
             public Person(string name, string vorname, int alter, string beruf, string hobby)
             {
-                this.name = name;
-                this.vorname = vorname;
+                if(StringHasNumber(name) == false)
+                {
+                    this.name = name;
+                }
+                if(StringHasNumber(vorname) == false)
+                {
+                    this.vorname = vorname;
+                }
                 this.alter = alter;
                 changed = false;
                 this.beruf = beruf;
@@ -143,7 +155,9 @@ namespace Vergleich_Prozedural_vs._Objektorientierung
                     }
                     else
                     {
-                        throw new FormatException();
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Der Name wurde nicht geändert. Grund: Zahl im Namen.");
+                        Console.ResetColor();
                     }
                 }
                 get
