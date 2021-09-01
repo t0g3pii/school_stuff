@@ -1,17 +1,3 @@
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Thanks again! Now go create something AMAZING! :D
-***
-***
-***
-*** To avoid retyping too much info. Do a search and replace for the following:
-*** github_username, repo_name, twitter_handle, email, project_title, project_description
--->
-
-
-
 <!-- PROJECT SHIELDS -->
 <!--
 *** I'm using markdown "reference style" links for readability.
@@ -41,11 +27,11 @@
   <p align="center">
     Stuff i need to do for the Georg-Simon-Ohm Berufskolleg
     <br />
-    <a href="https://github.com/t0g3pii/school_stuff"><strong>Explore the docs »</strong></a>
+    <!-- <a href="https://github.com/t0g3pii/school_stuff"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://github.com/t0g3pii/school_stuff">View Demo</a>
-    ·
+    · -->
     <a href="https://github.com/t0g3pii/school_stuff/issues">Report Bug</a>
     ·
     <a href="https://github.com/t0g3pii/school_stuff/issues">Request Feature</a>
@@ -73,7 +59,6 @@
     </li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgements">Acknowledgements</a></li>
@@ -85,18 +70,18 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
-Here's a blank template to get started:
-**To avoid retyping too much info. Do a search and replace with your text editor for the following:**
-`t0g3pii`, `school_stuff`, `t0g3pii`, `n-hartwig@hotmail.com`, `School-Stuff`, `Stuff i need to do for the Georg-Simon-Ohm Berufskolleg`
+Template Stuff:\
+**Big**\
+`Quote Style`
+  ```sh
+  Code Style
+  ```
 
 
 ### Built With
 
-* []()
-* []()
-* []()
+* [Visual Studio 2019](https://visualstudio.microsoft.com/de/)
+* [Help from Teachers of the GSO](https://www.gso-koeln.de/)
 
 
 
@@ -107,8 +92,7 @@ To get a local copy up and running follow these simple steps.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
+* Visual Studio 2019 with .NET Framework (C#)
   ```sh
   npm install npm@latest -g
   ```
@@ -119,19 +103,13 @@ This is an example of how to list things you need to use the software and how to
    ```sh
    git clone https://github.com/t0g3pii/school_stuff.git
    ```
-2. Install NPM packages
-   ```sh
-   npm install
-   ```
 
 
 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
+_Im just using this as a Cloud for my School Stuff_
 
 
 
@@ -142,23 +120,11 @@ See the [open issues](https://github.com/t0g3pii/school_stuff/issues) for a list
 
 
 
-<!-- CONTRIBUTING -->
-## Contributing
-
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-
-
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Currently no license.
+<!-- Distributed under the MIT License. See `LICENSE` for more information.-->
 
 
 
