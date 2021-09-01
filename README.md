@@ -140,7 +140,7 @@ Project Link: [https://github.com/t0g3pii/school_stuff](https://github.com/t0g3p
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
 
-* []()
+* [repo-badges](https://github.com/dwyl/repo-badges)
 * []()
 * []()
 
