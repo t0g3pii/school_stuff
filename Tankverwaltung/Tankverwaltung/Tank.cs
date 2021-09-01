@@ -8,7 +8,8 @@ namespace Tankverwaltung
 {
     class Tank
     {
-        private static int nummer = 0;
+        private static int anzahlTank = 0;
+        private int nummer;
         private double hoehe;
         private double radius;
         private double volumen;
@@ -20,9 +21,10 @@ namespace Tankverwaltung
             if (hoehe > 10 || radius > 3) throw new Exception();
             this.hoehe = hoehe;
             this.radius = radius;
-            volumen = (radius * radius) * Math.PI * hoehe;
+            volumen = Math.Round((radius * radius) * Math.PI * hoehe);
             fuellstand = 0;
-            nummer++;
+            anzahlTank++;
+            nummer = anzahlTank;
 
             // DEBUG // GEHÖRT HIER NIEMALS HIN
             Console.WriteLine("Tank mit der ID " + nummer + " wurde erstellt");

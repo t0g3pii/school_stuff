@@ -10,36 +10,34 @@ namespace Tankverwaltung
     {
         static void Main(string[] args)
         {
-            Array tank = new Array[24];
-
-
-            Tank t1 = new Tank(10, 3); // ID: 1
-            t1.Ausgeben();
-            Tank t2 = new Tank(10, 3); // ID: 2
-            Tank t3 = new Tank(10, 3); // ID: 3
-            Tank t4 = new Tank(10, 3); // ID: 4
-            Tank t5 = new Tank(10, 3); // ID: 5
-            Tank t6 = new Tank(10, 3); // ID: 6
-
-            Console.WriteLine("Bitte geben sie die Höhe in Metern von ihrem neuen Tank an");
-            double hoehe = Convert.ToDouble(Console.ReadLine());
-            Console.WriteLine("Bitte geben sie den Radius in Metern von ihrem neuen Tank an");
-            double radius = Convert.ToDouble(Console.ReadLine());
-
-            Tank t7 = new Tank(hoehe, radius);
-            t7.Ausgeben();
-            Console.WriteLine("Bitte geben sie in ml an wieviel sie den Tank befüllen möchten.");
-            double fuellen = Convert.ToDouble(Console.ReadLine());
-            t7.Befuellen(fuellen);
-            t7.Ausgeben();
-            Console.WriteLine("Bitte geben sie in ml an wieviel sie den Tank entleeren möchten.");
-            double leeren = Convert.ToDouble(Console.ReadLine());
-            t7.Entleeren(leeren);
-            t7.Ausgeben();
-
-
-            t1.Ausgeben();
+            Tank[] tankArray = new Tank[24];
+            tankArray[0] = new Tank(5, 3);
+            tankArray.SetValue(new Tank(3, 3), 1);
+            tankArray[0].Ausgeben();
+            tankArray[1].Ausgeben();
             Console.ReadLine();
+
+
+            // Methode zum Hinzufügen von Elementen in einen Array
+            // Wieso gibt es kein .AddValue()?
+            /** Wird genutzt wenn Größe nicht bekannt ist
+             * dort aber lieber dann List benutzen
+            tankArray = AddElementToArray(tankArray, new Tank(10, 3));
+            tankArray[2].Ausgeben();
+            Tank[] AddElementToArray<Tank>(Tank[] array, Tank element)
+            {
+                Tank[] newArray = new Tank[array.Length + 1];
+                int i;
+                for (i = 0; i < array.Length; i++)
+                {
+                    newArray[i] = array[i];
+                }
+                newArray[i] = element;
+                return newArray;
+            }
+            */
         }
+
+        
     }
 }
