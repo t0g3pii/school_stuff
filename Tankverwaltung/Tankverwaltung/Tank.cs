@@ -36,6 +36,9 @@ namespace Tankverwaltung
             {
                 return fuellstand;
             }
+            set {
+                fuellstand = Fuellstand;
+            }               
         }
 
         public double Volumen
