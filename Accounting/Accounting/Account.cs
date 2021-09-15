@@ -10,35 +10,36 @@ namespace Accounting
     {
         // Attribute
         private string countryCode; // Maximale/Minimale Länge 2 // Nur Buchstaben
-        private int bankCode;       // Minimale Länge 10
-        private int number;         // if < 10 stelle, füllen mit 0
+        private int bankCode;       // Minimale Länge 10 (8 mit Prüfcode 10)
+        private string number;         // if < 10 stelle, füllen mit 0
         private double balance;
-        private static int accountAmount = 1000000000;
+
 
         // Konstruktoren
-        public Account(string countryCode, int bankCode)
+        public Account(string countryCode, int bankCode, double number)
         {
-            this.bankCode = bankCode;
-            this.countryCode = countryCode;
-            number = accountAmount;
-            balance = 0;
-            accountAmount++;
-        }
+            if (countryCode.Length != 2) throw new Exception("Der Länder-Code kann nur 2 Zeichen enthalten.", new ArgumentException("Bitte geben sie max. 2 Zeichen an."));
+            if (Convert.ToString(bankCode).Length != 8) throw new Exception("Die Bankleitzahl muss 8 Ziffern beinhalten und darf nicht mit einer 0 beginnen.", new ArgumentException("Bitte geben sie max. 8 Zeichen an."));
+            if (number < 1) throw new Exception("Die Kontonummer darf nicht unter 1 sein.", new ArgumentException("Bitte geben sie max. 8 Zeichen an."));
+            if (number > 9999999999) throw new Exception("Die Kontonummer darf nicht mehr wie 10 Stellen besitzen.", new ArgumentException("Bitte nutzen sie max. 10 Zeichen für die Kontonummer."));
+            if (Convert.ToString(number).Length < 10)
+            {
+                int missing = 8 - Convert.ToString(number).Length;
+                string bankNumber = Convert.ToString(number);
+                string newNumber = "0";
+                for(int i = 1; i < missing; i++)
+                {
+                    newNumber += 0;
+                }
+                newNumber += bankNumber;
+                this.number = newNumber;
 
-        public Account(string countryCode, int bankCode, int number)
-        {
-            this.bankCode = bankCode;
+            } else {
+                this.number = Convert.ToString(number);
+            }
             this.countryCode = countryCode;
-            this.number = number;
+            this.bankCode = bankCode;
             balance = 0;
-        }
-
-        public Account(string countryCode, int bankCode, int number, double balance)
-        {
-            this.bankCode = bankCode;
-            this.countryCode = countryCode;
-            this.number = number;
-            this.balance = balance;
         }
 
         // Eigenschaften
@@ -58,7 +59,7 @@ namespace Accounting
             }
         }
 
-        public int Number
+        public string Number
         {
             get
             {
@@ -70,7 +71,7 @@ namespace Accounting
         {
             get
             {
-                return null;
+                return countryCode + CalcCheckDigit() + bankCode + number;
             }
         }
 
@@ -85,14 +86,22 @@ namespace Accounting
             balance = balance - amount; // Hier Check einbauen if amount is (-) oder if amount < balance
         }
 
-        private int CalcCheckDigit()
+        private string CalcCheckDigit()
         {
-            string temp;
-            if(countryCode == "DE")
+            string temp = null;
+            string[] res = null;
+            if (countryCode == "DE")
             {
                 temp = bankCode + "" + number + "" + 131400;
+                Console.WriteLine(temp);
+                temp = Convert.ToString(Convert.ToDecimal(temp) / 97);
+                Console.WriteLine(temp);
+                res = temp.Split(',');
+                res[1] = res[1].Remove(2);
+                res[1] = Convert.ToString(98 - Convert.ToDouble(res[1]));
+                // Prüfziffer wird falsch ausgerechnet!!!!
             }
-            return null;
+            return res[1];
         }
     }
 }
