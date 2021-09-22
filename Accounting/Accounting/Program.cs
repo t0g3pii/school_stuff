@@ -28,8 +28,15 @@ namespace Accounting
             ShowWindow(ThisConsole, MAXIMIZE);
 
             // hier beginnt die Main
-            Account ac = new Account("DE", 50010517, 123456789);
-            Console.WriteLine(ac.IBAN);
+            Person p = new Person("Nico", new DateTime(2000, 05, 14), "Thomas-Dehler-Weg", "3", "51109", "Köln");
+            Console.WriteLine("Name: " + p.Name +
+                              "\nVolljährig?: " + p.IstVolljaehrig + 
+                              "\nAktuelle Adresse: " + p.AktuelleAdresseAusgeben());
+
+            Person pm = new Person("Nico", new DateTime(2006, 05, 14), "Thomas-Dehler-Weg", "3", "51109", "Köln");
+            Console.WriteLine("Name: " + pm.Name +
+                              "\nVolljährig?: " + pm.IstVolljaehrig +
+                              "\nAktuelle Adresse: " + pm.AktuelleAdresseAusgeben());
             Console.ReadLine();
         }
     }
