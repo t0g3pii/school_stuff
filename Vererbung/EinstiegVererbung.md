@@ -62,7 +62,7 @@ class Schueler:Mensch
 {
 	private string klasse;
 
-	public  Schueler(string vorname, string nachname, string klasse):base(vorname, nachname)
+	public Schueler(string vorname, string nachname, string klasse):base(vorname, nachname)
 	{
 		this.klasse = klasse;
 	}
@@ -82,6 +82,11 @@ class Lehrkraft:Mensch {
 	
 	public override void InformationenAusgeben() {
 		Console.WriteLine("(" + kuerzel + ") " + vorname + " " + name);
+	}
+	
+	//Ausgabe: Guten Morgen, mein Name ist Herr Meyer. Ich leite die Abteilung ITA.
+	public override void Vorstellen() {
+		Console.WriteLine("Guten Morgen, mein Name ist Herr " + name);
 	}
 }
 
