@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EinstiegVererbung.Schiff
+namespace Vererbung
 {
 	class Segelboot
 	{
