@@ -22,9 +22,11 @@ namespace Frogger
         int breite = -1;
         int hoehe = -1;
         int hoeheJeBereich = -1;
+        int breiteJeBereich = -1;
 
         // Array für alle Bereiche (Start, Bahnen, Ziel)
         Rectangle[] alleBahnen = new Rectangle[anzahlBereiche];
+        Rectangle[] alleSchienen = new Rectangle[anzahlBereiche];
 
         // Listen für die Hindernisse auf den Bahnen
         List<Hindernis> alleHindernisse = new List<Hindernis>();
@@ -33,6 +35,8 @@ namespace Frogger
 
         int spawnRate = 14;
         int spawnZaehler = 0;
+        int leftRight = 0;
+        int upDown = 0;
 
         // Zufalszahlengenerator
         Random rndBahn = new Random();
@@ -60,13 +64,14 @@ namespace Frogger
             {
 
                 breite = this.ClientSize.Width;
-
                 hoehe = this.ClientSize.Height;
 
                 hoeheJeBereich = hoehe / anzahlBereiche;
+                breiteJeBereich = breite / anzahlBereiche - 40;
 
 
                 hoeheJeBereich = hoeheJeBereich + 2;
+                breiteJeBereich = breiteJeBereich + 2;
 
 
                 spieler = new Rectangle((breite / 2) - 15, hoehe - 35, 30, 30);
@@ -146,6 +151,16 @@ namespace Frogger
                 }
             }
 
+            // Kann nicht funktionieren weil X&Y von Hindernisse anders ist, Konvertierung wäre nötig
+            // Spieler basiert auf Bereiche, Hindernisse auf die ClientSize für Y
+            //for(int i = alleHindernisse.Count; i < 0; i++)
+            //{
+            //    if(alleHindernisse[i].X == spieler.X && alleHindernisse[i].Y == spieler.Y)
+            //    {
+            //        FrmFrogger.ActiveForm.Text = "Frogger - VERLOREN";
+            //    }
+            //}
+
             this.Refresh();
         }
 
@@ -154,12 +169,40 @@ namespace Frogger
 
             if (e.KeyCode == Keys.Up)
             {
-                spieler.Y = spieler.Y - hoeheJeBereich;
+                if(upDown < 5) { 
+                    spieler.Y = spieler.Y - hoeheJeBereich;
+                    upDown = upDown + 1;
+                    FrmFrogger.ActiveForm.Text = "Frogger - X:  " + upDown + " - Y: " + leftRight;
+                }
             }
 
             if(e.KeyCode == Keys.Down)
             {
-                spieler.Y = spieler.Y + hoeheJeBereich;
+                if(upDown > 0) { 
+                    spieler.Y = spieler.Y + hoeheJeBereich;
+                    upDown = upDown - 1;
+                    FrmFrogger.ActiveForm.Text = "Frogger - X:  " + upDown + " - Y: " + leftRight;
+                }
+            }
+
+            if(e.KeyCode == Keys.Left)
+            {
+                if(leftRight > -6)
+                {
+                    spieler.X = spieler.X - breiteJeBereich;
+                    leftRight = leftRight - 1;
+                    FrmFrogger.ActiveForm.Text = "Frogger - X:  " + upDown + " - Y: " + leftRight;
+                }
+            }
+
+            if (e.KeyCode == Keys.Right)
+            {
+                if (leftRight < 6)
+                {
+                    spieler.X = spieler.X + breiteJeBereich;
+                    leftRight = leftRight + 1;
+                    FrmFrogger.ActiveForm.Text = "Frogger - X:  " + upDown + " - Y: " + leftRight;
+                }
             }
 
             this.Refresh();
