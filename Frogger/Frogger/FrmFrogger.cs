@@ -57,6 +57,8 @@ namespace Frogger
         public FrmFrogger()
         {
             InitializeComponent();
+            this.MaximumSize = this.Size;
+            this.MinimumSize = this.Size;
         }
 
         private void FrmFrogger_Load(object sender, EventArgs e)
