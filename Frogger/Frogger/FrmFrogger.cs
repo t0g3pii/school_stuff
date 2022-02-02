@@ -35,10 +35,11 @@ namespace Frogger
 
         Rectangle spieler;
 
-        int spawnRate = 14;
+        int spawnRate = 3;
         int spawnZaehler = 0;
         int leftRight = 0;
         int upDown = 0;
+
         int punkte = 0;
 
         bool alive = true;
@@ -68,19 +69,22 @@ namespace Frogger
         {
             SoundPlayer simpleSound = new SoundPlayer(@"../../resources/background_audio.wav");
             if (action == "start") { 
-                simpleSound.PlayLooping();
+                //simpleSound.PlayLooping();
             } else if (action == "pause")
             {
                 simpleSound.Stop();
+            } else if (action == "verloren")
+            {
+                SoundPlayer looseSound = new SoundPlayer("D:/3ds/PRG/school_stuff/Frogger/Frogger/bin/Debug/winxp.wav");
+                looseSound.Play();
             }
         }
 
         private void FrmFrogger_Paint(object sender, PaintEventArgs e)
         {
 
-            if(tmrGameTick.Enabled == false)
+            if(tmrGameTick.Enabled == false && !paused)
             {
-
                 breite = this.ClientSize.Width;
                 hoehe = this.ClientSize.Height;
 
@@ -99,6 +103,25 @@ namespace Frogger
                     alleBahnen[i] = new Rectangle(0, i * hoeheJeBereich, breite, hoeheJeBereich);
                 }
 
+                tmrGameTick.Start();
+            }
+
+            if(tmrGameTick.Enabled == true)
+            {
+                tmrGameTick.Stop();
+                breite = this.ClientSize.Width;
+                hoehe = this.ClientSize.Height;
+
+                hoeheJeBereich = hoehe / anzahlBereiche;
+                breiteJeBereich = breite / anzahlBereiche - 40;
+
+
+                hoeheJeBereich = hoeheJeBereich + 2;
+                breiteJeBereich = breiteJeBereich + 2;
+                for (int i = 0; i < alleBahnen.Length; i++)
+                {
+                    alleBahnen[i] = new Rectangle(0, i * hoeheJeBereich, breite, hoeheJeBereich);
+                }
                 tmrGameTick.Start();
             }
 
@@ -173,22 +196,33 @@ namespace Frogger
                 if(spieler.Right > hindernis.X && spieler.Right < hindernis.X + hindernis.Width && spieler.Y > hindernis.Y && spieler.Y < hindernis.Y + hoeheJeBereich)
                 {
                     // verloren
-                    //alive = false;
-                    //this.Close();
+                    punkte = 0;
+                    upDown = 0;
+                    SimpleSoundController("verloren");
+                    tmrGameTick.Stop();
                 }
                 else if (spieler.Left > hindernis.X && spieler.Left < hindernis.X + hindernis.Width && spieler.Y > hindernis.Y && spieler.Y < hindernis.Y + hoeheJeBereich)
                 {
                     // verloren
-                    //alive = false;
-                    //this.Close();
+                    punkte = 0;
+                    upDown = 0;
+                    SimpleSoundController("verloren");
+                    tmrGameTick.Stop();
                 }
             }
+            // .Active == true, CanFocus == true || = Cash wenn raus aus Game
+            if(this.Focused == true)
+            {
+                FrmFrogger.ActiveForm.Text = "Frogger - Y:  " + upDown + " - X: " + leftRight + " - Score: " + punkte;
+            }
 
-            if(upDown == 5)
+            if (upDown == 5)
             {
                 upDown = 0;
                 spieler.Y = hoehe - 35;
                 punkte = punkte + 1;
+                
+
             }
             this.Refresh();
         }
@@ -203,7 +237,7 @@ namespace Frogger
                 if (upDown < 5 && alive == true && paused == false) { 
                     spieler.Y = spieler.Y - hoeheJeBereich;
                     upDown = upDown + 1;
-                    FrmFrogger.ActiveForm.Text = "Frogger - Y:  " + upDown + " - X: " + leftRight;
+                    
                 }
             }
 
@@ -212,7 +246,7 @@ namespace Frogger
                 if(upDown > 0 && alive == true && paused == false) { 
                     spieler.Y = spieler.Y + hoeheJeBereich;
                     upDown = upDown - 1;
-                    FrmFrogger.ActiveForm.Text = "Frogger - Y:  " + upDown + " - X: " + leftRight;
+                    
                 }
             }
 
@@ -222,7 +256,7 @@ namespace Frogger
                 {
                     spieler.X = spieler.X - breiteJeBereich;
                     leftRight = leftRight - 1;
-                    FrmFrogger.ActiveForm.Text = "Frogger - Y:  " + upDown + " - X: " + leftRight;
+                    
                 }
             }
 
@@ -232,54 +266,24 @@ namespace Frogger
                 {
                     spieler.X = spieler.X + breiteJeBereich;
                     leftRight = leftRight + 1;
-                    FrmFrogger.ActiveForm.Text = "Frogger - Y:  " + upDown + " - X: " + leftRight;
+                    
                 }
             }
 
             if(e.KeyCode == Keys.Escape)
             {
-                Button btnExit = new Button();
-                btnExit.Text = "Level Verlassen";
-                btnExit.Location = new Point(20, 0);
-                btnExit.Size = new Size(50, 100);
-                Button btnRestart = new Button();
-                btnRestart.Text = "Neustarten";
-                btnRestart.Location = new Point(0, 0);
-                btnRestart.Size = new Size(50, 100);
-
-                this.Controls.Add(btnExit);
-                this.Controls.Add(btnRestart);
                 if (paused == false) { 
                     paused = true;
                     tmrGameTick.Stop();
-                    tmrGameTick.Interval = 20000;
-                
-                    btnRestart.Enabled = true;
-                    btnRestart.Visible = true;
-
-                
-                    btnExit.Enabled = true;
-                    btnExit.Visible = true;
-
+                    pnlPause.Enabled = true;
+                    pnlPause.Visible = true;
                     SimpleSoundController("pause");
-                    MessageBox.Show("[DEBUG INFORMATIONEN]" +
-                                    "\nSpieler X: " + spieler.X +
-                                    "\nSpieler Y: " + spieler.Y +
-                                    "\nSpieler UpDown: " + upDown +
-                                    "\nSpieler leftRight: " + leftRight +
-                                    "\nAlive?: " + alive +
-                                    "\nPaused?: " + paused +
-                                    "\nSpielerX2: " + spielerX +
-                                    "\nSpielerY2: " + spielerY);
                 } else
                 {
                     paused = false;
                     tmrGameTick.Start();
-                    tmrGameTick.Interval = 100;
-                    btnRestart.Enabled = false;
-                    btnRestart.Visible = false;
-                    btnExit.Enabled = false;
-                    btnExit.Visible = false;
+                    pnlPause.Enabled = false;
+                    pnlPause.Visible = false;
                     SimpleSoundController("start");
                 }
             }
@@ -302,9 +306,22 @@ namespace Frogger
             this.Refresh();
         }
 
-        private void btnRestart_Click(object sender, EventArgs e)
+        private void FrmFrogger_Resize(object sender, EventArgs e)
         {
-            MessageBox.Show("Funktioniert");
+
+        }
+
+        private void BtnExit_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void BtnResume_Click(object sender, EventArgs e)
+        {
+            paused = false;
+            tmrGameTick.Start();
+            pnlPause.Enabled = false;
+            pnlPause.Visible = false;
         }
     }
 }
