@@ -4,7 +4,9 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Media;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -37,6 +39,10 @@ namespace Frogger
         int spawnZaehler = 0;
         int leftRight = 0;
         int upDown = 0;
+        int punkte = 0;
+
+        bool alive = true;
+        bool paused = false;
 
         // Zufalszahlengenerator
         Random rndBahn = new Random();
@@ -55,6 +61,18 @@ namespace Frogger
         private void FrmFrogger_Load(object sender, EventArgs e)
         {
             DoubleBuffered = true;
+            SimpleSoundController("start");
+        }
+
+        private void SimpleSoundController(string action)
+        {
+            SoundPlayer simpleSound = new SoundPlayer(@"../../resources/background_audio.wav");
+            if (action == "start") { 
+                simpleSound.PlayLooping();
+            } else if (action == "pause")
+            {
+                simpleSound.Stop();
+            }
         }
 
         private void FrmFrogger_Paint(object sender, PaintEventArgs e)
@@ -123,7 +141,6 @@ namespace Frogger
 
         private void tmrGameTick_Tick(object sender, EventArgs e)
         {
-
             spawnZaehler++;
             if(spawnZaehler == spawnRate)
             {
@@ -151,61 +168,143 @@ namespace Frogger
                 }
             }
 
-            // Kann nicht funktionieren weil X&Y von Hindernisse anders ist, Konvertierung wäre nötig
-            // Spieler basiert auf Bereiche, Hindernisse auf die ClientSize für Y
-            //for(int i = alleHindernisse.Count; i < 0; i++)
-            //{
-            //    if(alleHindernisse[i].X == spieler.X && alleHindernisse[i].Y == spieler.Y)
-            //    {
-            //        FrmFrogger.ActiveForm.Text = "Frogger - VERLOREN";
-            //    }
-            //}
+            foreach(Hindernis hindernis in alleHindernisse)
+            {
+                if(spieler.Right > hindernis.X && spieler.Right < hindernis.X + hindernis.Width && spieler.Y > hindernis.Y && spieler.Y < hindernis.Y + hoeheJeBereich)
+                {
+                    // verloren
+                    //alive = false;
+                    //this.Close();
+                }
+                else if (spieler.Left > hindernis.X && spieler.Left < hindernis.X + hindernis.Width && spieler.Y > hindernis.Y && spieler.Y < hindernis.Y + hoeheJeBereich)
+                {
+                    // verloren
+                    //alive = false;
+                    //this.Close();
+                }
+            }
 
+            if(upDown == 5)
+            {
+                upDown = 0;
+                spieler.Y = hoehe - 35;
+                punkte = punkte + 1;
+            }
             this.Refresh();
         }
 
         private void FrmFrogger_KeyDown(object sender, KeyEventArgs e)
         {
+            var spielerX = spieler.X;
+            var spielerY = spieler.Y;
 
             if (e.KeyCode == Keys.Up)
             {
-                if(upDown < 5) { 
+                if (upDown < 5 && alive == true && paused == false) { 
                     spieler.Y = spieler.Y - hoeheJeBereich;
                     upDown = upDown + 1;
-                    FrmFrogger.ActiveForm.Text = "Frogger - X:  " + upDown + " - Y: " + leftRight;
+                    FrmFrogger.ActiveForm.Text = "Frogger - Y:  " + upDown + " - X: " + leftRight;
                 }
             }
 
             if(e.KeyCode == Keys.Down)
             {
-                if(upDown > 0) { 
+                if(upDown > 0 && alive == true && paused == false) { 
                     spieler.Y = spieler.Y + hoeheJeBereich;
                     upDown = upDown - 1;
-                    FrmFrogger.ActiveForm.Text = "Frogger - X:  " + upDown + " - Y: " + leftRight;
+                    FrmFrogger.ActiveForm.Text = "Frogger - Y:  " + upDown + " - X: " + leftRight;
                 }
             }
 
             if(e.KeyCode == Keys.Left)
             {
-                if(leftRight > -6)
+                if(leftRight > -6 && alive == true && paused == false)
                 {
                     spieler.X = spieler.X - breiteJeBereich;
                     leftRight = leftRight - 1;
-                    FrmFrogger.ActiveForm.Text = "Frogger - X:  " + upDown + " - Y: " + leftRight;
+                    FrmFrogger.ActiveForm.Text = "Frogger - Y:  " + upDown + " - X: " + leftRight;
                 }
             }
 
             if (e.KeyCode == Keys.Right)
             {
-                if (leftRight < 6)
+                if (leftRight < 6 && alive == true && paused == false)
                 {
                     spieler.X = spieler.X + breiteJeBereich;
                     leftRight = leftRight + 1;
-                    FrmFrogger.ActiveForm.Text = "Frogger - X:  " + upDown + " - Y: " + leftRight;
+                    FrmFrogger.ActiveForm.Text = "Frogger - Y:  " + upDown + " - X: " + leftRight;
                 }
             }
 
+            if(e.KeyCode == Keys.Escape)
+            {
+                Button btnExit = new Button();
+                btnExit.Text = "Level Verlassen";
+                btnExit.Location = new Point(20, 0);
+                btnExit.Size = new Size(50, 100);
+                Button btnRestart = new Button();
+                btnRestart.Text = "Neustarten";
+                btnRestart.Location = new Point(0, 0);
+                btnRestart.Size = new Size(50, 100);
+
+                this.Controls.Add(btnExit);
+                this.Controls.Add(btnRestart);
+                if (paused == false) { 
+                    paused = true;
+                    tmrGameTick.Stop();
+                    tmrGameTick.Interval = 20000;
+                
+                    btnRestart.Enabled = true;
+                    btnRestart.Visible = true;
+
+                
+                    btnExit.Enabled = true;
+                    btnExit.Visible = true;
+
+                    SimpleSoundController("pause");
+                    MessageBox.Show("[DEBUG INFORMATIONEN]" +
+                                    "\nSpieler X: " + spieler.X +
+                                    "\nSpieler Y: " + spieler.Y +
+                                    "\nSpieler UpDown: " + upDown +
+                                    "\nSpieler leftRight: " + leftRight +
+                                    "\nAlive?: " + alive +
+                                    "\nPaused?: " + paused +
+                                    "\nSpielerX2: " + spielerX +
+                                    "\nSpielerY2: " + spielerY);
+                } else
+                {
+                    paused = false;
+                    tmrGameTick.Start();
+                    tmrGameTick.Interval = 100;
+                    btnRestart.Enabled = false;
+                    btnRestart.Visible = false;
+                    btnExit.Enabled = false;
+                    btnExit.Visible = false;
+                    SimpleSoundController("start");
+                }
+            }
+
+            if(e.KeyCode == Keys.D)
+            {
+                MessageBox.Show("[DEBUG INFORMATIONEN]" +
+                                "\nSpieler X: " + spieler.X +
+                                "\nSpieler Y: " + spieler.Y +
+                                "\nSpieler UpDown: " + upDown + 
+                                "\nSpieler leftRight: " + leftRight + 
+                                "\nAlive?: " + alive + 
+                                "\nPaused?: " + paused +
+                                "\nSpielerX2: " + spielerX +
+                                "\nSpielerY2: " + spielerY);
+            }
+
+
+
             this.Refresh();
+        }
+
+        private void btnRestart_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Funktioniert");
         }
     }
 }
