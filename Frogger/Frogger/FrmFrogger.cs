@@ -41,6 +41,7 @@ namespace Frogger
         int upDown = 0;
 
         int punkte = 0;
+        int lives = 3;
 
         bool alive = true;
         bool paused = false;
@@ -168,6 +169,39 @@ namespace Frogger
             e.Graphics.DrawImage(froschImage, spieler, rectangleImage, units);
 
 
+            if (lives > 0)
+            {
+                Image heartImage = Image.FromFile("heart.png");
+                Image heartEmptyImage = Image.FromFile("heartEmpty.png");
+                Rectangle heartRectangle = new Rectangle(0, 0, 32, 32);
+                Rectangle liveOne = new Rectangle(330, 10, 32, 32);
+                Rectangle liveTwo = new Rectangle(365, 10, 32, 32);
+                Rectangle liveThree = new Rectangle(400, 10, 32, 32);
+                if (lives == 1)
+                {
+                    e.Graphics.DrawImage(heartImage, liveOne, heartRectangle, units);
+                    e.Graphics.DrawImage(heartEmptyImage, liveTwo, heartRectangle, units);
+                    e.Graphics.DrawImage(heartEmptyImage, liveThree, heartRectangle, units);
+                }
+                if (lives == 2) {
+                    e.Graphics.DrawImage(heartImage, liveOne, heartRectangle, units);
+                    e.Graphics.DrawImage(heartImage, liveTwo, heartRectangle, units);
+                    e.Graphics.DrawImage(heartEmptyImage, liveThree, heartRectangle, units);
+                }
+                if (lives == 3) {
+                    e.Graphics.DrawImage(heartImage, liveOne, heartRectangle, units);
+                    e.Graphics.DrawImage(heartImage, liveTwo, heartRectangle, units);
+                    e.Graphics.DrawImage(heartImage, liveThree, heartRectangle, units);
+                }
+            }
+            else
+            {
+                pnlHighscore.Enabled = true;
+                pnlHighscore.Visible = true;
+                lblScoreBox.Text = lblScoreBox.Text + ' ' + punkte;
+                paused = true;
+                tmrGameTick.Stop();
+            }
 
         }
 
@@ -202,27 +236,27 @@ namespace Frogger
 
             foreach(Hindernis hindernis in alleHindernisse)
             {
-                if(spieler.Right > hindernis.X && spieler.Right < hindernis.X + hindernis.Width && spieler.Y > hindernis.Y && spieler.Y < hindernis.Y + hoeheJeBereich)
+                if((spieler.Right > hindernis.X && spieler.Right < hindernis.X + hindernis.Width && spieler.Y > hindernis.Y && spieler.Y < hindernis.Y + hoeheJeBereich) || (spieler.Left > hindernis.X && spieler.Left < hindernis.X + hindernis.Width && spieler.Y > hindernis.Y && spieler.Y < hindernis.Y + hoeheJeBereich))
                 {
                     // verloren
-                    punkte = 0;
-                    upDown = 0;
-                    SimpleSoundController("verloren");
-                    tmrGameTick.Stop();
-                }
-                else if (spieler.Left > hindernis.X && spieler.Left < hindernis.X + hindernis.Width && spieler.Y > hindernis.Y && spieler.Y < hindernis.Y + hoeheJeBereich)
-                {
-                    // verloren
-                    punkte = 0;
-                    upDown = 0;
-                    SimpleSoundController("verloren");
-                    tmrGameTick.Stop();
+                    if(lives == 0) { 
+                        punkte = 0;
+                        upDown = 0;
+                        SimpleSoundController("verloren");
+                        tmrGameTick.Stop();
+                    } else
+                    {
+                        lives = lives - 1;
+                        upDown = 0;
+                        SimpleSoundController("verloren");
+                        tmrGameTick.Stop();
+                    }
                 }
             }
             // .Active == true, CanFocus == true || = Cash wenn raus aus Game
             if(this.Focused == true)
             {
-                FrmFrogger.ActiveForm.Text = "Frogger - Y:  " + upDown + " - X: " + leftRight + " - Score: " + punkte;
+                FrmFrogger.ActiveForm.Text = "Frogger - Y:  " + upDown + " - X: " + leftRight + " - Score: " + punkte + " - Leben: " + lives;
             }
 
             if (upDown == 5)
@@ -331,6 +365,15 @@ namespace Frogger
             tmrGameTick.Start();
             pnlPause.Enabled = false;
             pnlPause.Visible = false;
+        }
+
+        private void BtnScoreSave_Click(object sender, EventArgs e)
+        {
+            pnlHighscore.Enabled = false;
+            pnlHighscore.Visible = false;
+            paused = false;
+            lives = 3;
+            tmrGameTick.Start();
         }
     }
 }
