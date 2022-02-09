@@ -372,7 +372,7 @@ namespace Frogger
             pnlHighscore.Enabled = false;
             pnlHighscore.Visible = false;
             paused = false;
-            lives = 3;
+            lives = 3; 
             tmrGameTick.Start();
         }
     }
