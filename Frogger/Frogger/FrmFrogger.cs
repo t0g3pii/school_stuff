@@ -35,7 +35,7 @@ namespace Frogger
 
         Rectangle spieler;
 
-        int spawnRate = 3;
+        int spawnRate = 14;
         int spawnZaehler = 0;
         int leftRight = 0;
         int upDown = 0;
@@ -77,8 +77,8 @@ namespace Frogger
                 simpleSound.Stop();
             } else if (action == "verloren")
             {
-                SoundPlayer looseSound = new SoundPlayer("D:/3ds/PRG/school_stuff/Frogger/Frogger/bin/Debug/winxp.wav");
-                looseSound.Play();
+                //SoundPlayer looseSound = new SoundPlayer("D:/3ds/PRG/school_stuff/Frogger/Frogger/bin/Debug/winxp.wav");
+                //looseSound.Play();
             }
         }
 
@@ -133,11 +133,13 @@ namespace Frogger
             SolidBrush brZiel = new SolidBrush(Color.LightYellow);
             SolidBrush brBahnHell = new SolidBrush(Color.LightGray);
             SolidBrush brBahnDunkel = new SolidBrush(Color.Gray);
+            
             SolidBrush brSpieler = new SolidBrush(Color.Green);
             Pen pnRand = new Pen(Color.Black, 1);
 
-
             e.Graphics.FillRectangles(brBahnHell, alleBahnen);
+            e.Graphics.FillRectangle(brBahnDunkel, alleBahnen[2]);
+            e.Graphics.FillRectangle(brBahnDunkel, alleBahnen[4]);
 
             // TODO Bahnen sollen sich in der Farbe abwechseln (brBahnHell, brBahnDunkel)
 
@@ -147,19 +149,24 @@ namespace Frogger
 
             e.Graphics.DrawRectangles(pnRand, alleBahnen);
 
-
+            GraphicsUnit units = GraphicsUnit.Pixel;
+            
+            // Autos zeichnen
+            // https://de.cleanpng.com
+            Image autoImage = Image.FromFile("auto.png");
+            Rectangle autoRectangle = new Rectangle(0, 0, 745, 400);
             foreach(Hindernis aktuellesHindernis in alleHindernisse)
             {
-                e.Graphics.FillRectangle(
-                    aktuellesHindernis.Brush,
-                    aktuellesHindernis.X,
-                    aktuellesHindernis.Y,
-                    aktuellesHindernis.Width,
-                    aktuellesHindernis.Height);
+                Rectangle rectangleHindernis = new Rectangle(aktuellesHindernis.X, aktuellesHindernis.Y, aktuellesHindernis.Width, aktuellesHindernis.Height);
+                e.Graphics.DrawImage(autoImage, rectangleHindernis, autoRectangle, units);
             }
 
+            // Frosch zeichnen
+            // https://de.cleanpng.com
+            Image froschImage = Image.FromFile("frosch.png");
+            Rectangle rectangleImage = new Rectangle(0, 0, 550, 550);
+            e.Graphics.DrawImage(froschImage, spieler, rectangleImage, units);
 
-            e.Graphics.FillEllipse(brSpieler, spieler);
 
 
         }
